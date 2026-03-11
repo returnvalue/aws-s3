@@ -1,0 +1,14 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  S3EventQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: S3EventQueue
+  MyCompanyDataBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: my-company-data
+      NotificationConfiguration:
+        QueueConfigurations:
+          - Event: 's3:ObjectCreated:*'
+            Queue: !GetAtt S3EventQueue.Arn

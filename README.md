@@ -38,3 +38,4 @@ Based on AWS best practices (SAA-C03), these labs cover:
 1. [Lab 1: Foundational S3 & Data Protection (Versioning)](./labs/lab1-s3-versioning/README.md)
 2. [Lab 2: Compliance & Security (SSE-KMS & Object Lock)](./labs/lab2-s3-compliance-kms/README.md)
 3. [Lab 3: Automated Cost Optimization (Lifecycle Policies)](./labs/lab3-s3-lifecycle-policies/README.md)
+4. [Lab 4: Event-Driven Architectures (S3 Event Notifications to SQS)](./labs/lab4-s3-event-notifications/README.md)

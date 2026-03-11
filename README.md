@@ -14,6 +14,7 @@ Based on AWS best practices (SAA-C03), these labs cover:
 * **Server-Side Encryption:** Securing data at rest with SSE-S3 and SSE-KMS.
 * **Compliance:** Enforcing WORM models with S3 Object Lock.
 * **Content Delivery:** Global distribution with Amazon CloudFront.
+* **Disaster Recovery:** Cross-Region Replication for mission-critical data.
 
 ## ⚙️ Prerequisites
 
@@ -43,3 +44,4 @@ Based on AWS best practices (SAA-C03), these labs cover:
 4. [Lab 4: Event-Driven Architectures (S3 Event Notifications to SQS)](./labs/lab4-s3-event-notifications/README.md)
 5. [Lab 5: Secure Third-Party Access (Pre-signed URLs)](./labs/lab5-s3-presigned-urls/README.md)
 6. [Lab 6: Content Delivery & Edge Caching (CloudFront Origin)](./labs/lab6-s3-cloudfront/README.md)
+7. [Lab 7: Disaster Recovery (Cross-Region Replication)](./labs/lab7-s3-replication/README.md)

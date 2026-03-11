@@ -36,3 +36,4 @@ Based on AWS best practices (SAA-C03), these labs cover:
 
 ## 📚 Labs Index
 1. [Lab 1: Foundational S3 & Data Protection (Versioning)](./labs/lab1-s3-versioning/README.md)
+2. [Lab 2: Compliance & Security (SSE-KMS & Object Lock)](./labs/lab2-s3-compliance-kms/README.md)

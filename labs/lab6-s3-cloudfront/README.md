@@ -7,7 +7,7 @@
 awslocal s3api create-bucket --bucket static-web-bucket
 
 # 2. Upload an index.html file
-echo "<html><body><h1>Hello from the CloudFront Edge!</h1></body></html>" > index.html
+echo '<html><body><h1>Hello from the CloudFront Edge!</h1></body></html>' > index.html
 awslocal s3api put-object \
   --bucket static-web-bucket \
   --key index.html \

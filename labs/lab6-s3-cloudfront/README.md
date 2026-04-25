@@ -5,6 +5,7 @@
 ```bash
 # 1. Create a bucket for static web hosting
 awslocal s3api create-bucket --bucket static-web-bucket
+aws s3api create-bucket --bucket static-web-bucket
 
 # 2. Upload an index.html file
 echo '<html><body><h1>Hello from the CloudFront Edge!</h1></body></html>' > index.html
@@ -13,9 +14,17 @@ awslocal s3api put-object \
   --key index.html \
   --body index.html \
   --content-type "text/html"
+aws s3api put-object \
+  --bucket static-web-bucket \
+  --key index.html \
+  --body index.html \
+  --content-type "text/html"
 
 # 3. Create a CloudFront Distribution pointing to the S3 bucket as its origin
 awslocal cloudfront create-distribution \
+  --origin-domain-name static-web-bucket.s3.amazonaws.com \
+  --default-root-object index.html
+aws cloudfront create-distribution \
   --origin-domain-name static-web-bucket.s3.amazonaws.com \
   --default-root-object index.html
 ```
@@ -40,3 +49,45 @@ awslocal cloudfront create-distribution \
 - `cloudfront create-distribution`: Creates a new web distribution.
     - `--origin-domain-name`: The DNS domain name of the S3 bucket or HTTP server from which CloudFront gets your files.
     - `--default-root-object`: The object that CloudFront returns when a viewer requests the root URL (e.g., `index.html`).
+
+---
+
+💡 **Pro Tip: Using `aws` instead of `awslocal`**
+
+If you prefer using the standard `aws` CLI without the `awslocal` wrapper or repeating the `--endpoint-url` flag, you can configure a dedicated profile in your AWS config files.
+
+### 1. Configure your Profile
+Add the following to your `~/.aws/config` file:
+```ini
+[profile localstack]
+region = us-east-1
+output = json
+# This line redirects all commands for this profile to LocalStack
+endpoint_url = http://localhost:4566
+```
+
+Add matching dummy credentials to your `~/.aws/credentials` file:
+```ini
+[localstack]
+aws_access_key_id = test
+aws_secret_access_key = test
+```
+
+### 2. Use it in your Terminal
+You can now run commands in two ways:
+
+**Option A: Pass the profile flag**
+```bash
+aws iam create-user --user-name DevUser --profile localstack
+```
+
+**Option B: Set an environment variable (Recommended)**
+Set your profile once in your session, and all subsequent `aws` commands will automatically target LocalStack:
+```bash
+export AWS_PROFILE=localstack
+aws iam create-user --user-name DevUser
+```
+
+### Why this works
+- **Precedence**: The AWS CLI (v2) supports a global `endpoint_url` setting within a profile. When this is set, the CLI automatically redirects all API calls for that profile to your local container instead of the real AWS cloud.
+- **Convenience**: This allows you to use the standard documentation commands exactly as written, which is helpful if you are copy-pasting examples from AWS labs or tutorials.

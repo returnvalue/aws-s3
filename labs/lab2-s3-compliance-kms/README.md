@@ -5,10 +5,14 @@
 ```bash
 # 1. Create a Customer Managed KMS Key (CMK)
 KMS_KEY_ID=$(awslocal kms create-key --description "S3 Encryption Key" --query 'KeyMetadata.KeyId' --output text)
+KMS_KEY_ID=$(aws kms create-key --description "S3 Encryption Key" --query 'KeyMetadata.KeyId' --output text)
 echo "Created KMS Key: $KMS_KEY_ID"
 
 # 2. Create a new bucket specifically configured for Object Lock
 awslocal s3api create-bucket \
+  --bucket secure-compliance-data \
+  --object-lock-enabled-for-bucket
+aws s3api create-bucket \
   --bucket secure-compliance-data \
   --object-lock-enabled-for-bucket
 
@@ -16,10 +20,21 @@ awslocal s3api create-bucket \
 awslocal s3api put-bucket-versioning \
   --bucket secure-compliance-data \
   --versioning-configuration Status=Enabled
+aws s3api put-bucket-versioning \
+  --bucket secure-compliance-data \
+  --versioning-configuration Status=Enabled
 
 # 4. Upload a file using SSE-KMS and enforce a COMPLIANCE Object Lock until 2030
 echo "Strictly Confidential Tax Records" > taxes.txt
 awslocal s3api put-object \
+  --bucket secure-compliance-data \
+  --key taxes.txt \
+  --body taxes.txt \
+  --ssekms-key-id $KMS_KEY_ID \
+  --server-side-encryption aws:kms \
+  --object-lock-mode COMPLIANCE \
+  --object-lock-retain-until-date "2030-12-31T00:00:00Z"
+aws s3api put-object \
   --bucket secure-compliance-data \
   --key taxes.txt \
   --body taxes.txt \
@@ -56,3 +71,45 @@ awslocal s3api put-object \
     - `--server-side-encryption`: Specifies the encryption algorithm (`aws:kms`).
     - `--object-lock-mode`: Sets the WORM mode (`COMPLIANCE` or `GOVERNANCE`).
     - `--object-lock-retain-until-date`: The timestamp when the lock expires.
+
+---
+
+💡 **Pro Tip: Using `aws` instead of `awslocal`**
+
+If you prefer using the standard `aws` CLI without the `awslocal` wrapper or repeating the `--endpoint-url` flag, you can configure a dedicated profile in your AWS config files.
+
+### 1. Configure your Profile
+Add the following to your `~/.aws/config` file:
+```ini
+[profile localstack]
+region = us-east-1
+output = json
+# This line redirects all commands for this profile to LocalStack
+endpoint_url = http://localhost:4566
+```
+
+Add matching dummy credentials to your `~/.aws/credentials` file:
+```ini
+[localstack]
+aws_access_key_id = test
+aws_secret_access_key = test
+```
+
+### 2. Use it in your Terminal
+You can now run commands in two ways:
+
+**Option A: Pass the profile flag**
+```bash
+aws iam create-user --user-name DevUser --profile localstack
+```
+
+**Option B: Set an environment variable (Recommended)**
+Set your profile once in your session, and all subsequent `aws` commands will automatically target LocalStack:
+```bash
+export AWS_PROFILE=localstack
+aws iam create-user --user-name DevUser
+```
+
+### Why this works
+- **Precedence**: The AWS CLI (v2) supports a global `endpoint_url` setting within a profile. When this is set, the CLI automatically redirects all API calls for that profile to your local container instead of the real AWS cloud.
+- **Convenience**: This allows you to use the standard documentation commands exactly as written, which is helpful if you are copy-pasting examples from AWS labs or tutorials.

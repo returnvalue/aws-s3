@@ -1,7 +1,6 @@
 # Lab 2: Compliance & Security (SSE-KMS & Object Lock)
 
 **Goal:** Store highly sensitive financial data. Encrypt it using a custom KMS key and apply a "Write Once Read Many" (WORM) Object Lock in Compliance mode so it cannot be deleted by anyone (even the root user) for 5 years.
-
 ```bash
 # 1. Create a Customer Managed KMS Key (CMK)
 KMS_KEY_ID=$(awslocal kms create-key --description "S3 Encryption Key" --query 'KeyMetadata.KeyId' --output text)

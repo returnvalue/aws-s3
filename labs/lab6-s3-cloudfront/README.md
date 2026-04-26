@@ -1,7 +1,6 @@
 # Lab 6: Content Delivery & Edge Caching (CloudFront Origin)
 
 **Goal:** Serve a static website stored in S3 to global users with minimal latency by fronting it with Amazon CloudFront.
-
 ```bash
 # 1. Create a bucket for static web hosting
 awslocal s3api create-bucket --bucket static-web-bucket

@@ -1,7 +1,6 @@
 # Lab 5: Secure Third-Party Access (Pre-signed URLs)
 
 **Goal:** A vendor needs to download the `report.txt` file from Lab 1, but they don't have AWS credentials. Generate a time-limited Pre-signed URL.
-
 ```bash
 # Generate a secure pre-signed URL valid for exactly 1 hour (3600 seconds)
 awslocal s3 presign s3://my-company-data/report.txt --expires-in 3600

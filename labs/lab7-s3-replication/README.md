@@ -1,7 +1,6 @@
 # Lab 7: Disaster Recovery (Cross-Region Replication)
 
 **Goal:** Protect mission-critical data by automatically replicating all objects uploaded to the primary bucket (`us-east-1`) to a backup bucket in Europe (`eu-west-1`).
-
 ```bash
 # 1. Create a destination bucket in a different region (eu-west-1)
 awslocal s3api create-bucket \

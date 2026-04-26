@@ -1,7 +1,6 @@
 # Lab 3: Automated Cost Optimization (Lifecycle Policies)
 
 **Goal:** Automate storage tiering. Application logs shouldn't sit in expensive standard storage forever. We will configure a rule to transition logs to Glacier after 30 days.
-
 ```bash
 # 1. Create the correctly formatted lifecycle policy JSON
 cat <<EOF > lifecycle.json

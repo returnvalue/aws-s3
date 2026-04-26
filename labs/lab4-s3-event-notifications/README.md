@@ -1,7 +1,6 @@
 # Lab 4: Event-Driven Architectures (S3 Event Notifications to SQS)
 
 **Goal:** Decouple your architecture. Whenever a new log file is uploaded to the bucket, automatically send an event notification to an SQS queue so a downstream service can process it.
-
 ```bash
 # 1. Create an SQS Queue and get its ARN
 QUEUE_URL=$(awslocal sqs create-queue --queue-name S3EventQueue --query 'QueueUrl' --output text)

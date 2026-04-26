@@ -1,7 +1,6 @@
 # Lab 1: Foundational S3 & Data Protection (Versioning)
 
 **Goal:** Create a core storage bucket and enable versioning to protect against accidental overwrites.
-
 ```bash
 # 1. Create the primary production bucket
 awslocal s3api create-bucket --bucket my-company-data --region us-east-1
